@@ -1,0 +1,6 @@
+[submodule "test/vendor/backbone"]
+	path = test/vendor/backbone
+	url = https://github.com/jashkenas/backbone
+[submodule "test/vendor/underscore"]
+	path = test/vendor/underscore
+	url = https://github.com/jashkenas/underscore
