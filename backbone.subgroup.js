@@ -16,8 +16,9 @@
     this.set( this._filtered_items() );
   }
 
-  Backbone.Subgroup.prototype = Backbone.Collection.prototype;
-  Backbone.Subgroup.__super__ = Backbone.Collection.prototype;
+  var Surrogate = function(){ this.constructor = Backbone.View; };
+  Surrogate.prototype = Backbone.Collection.prototype;
+  Backbone.Subgroup.prototype = new Surrogate;
 
   _.extend(Backbone.Subgroup.prototype, Backbone.Collection.prototype, {
     _filtered_items: function(){
@@ -47,7 +48,9 @@
     }
   })
 
+}).call(this) ;
 
+(function(){
   var GroupedCollection = Backbone.GroupedCollection = function( models, options ){
     Backbone.Collection.apply( this, arguments );
     if ( ! this.options ) this.options = {}
@@ -55,8 +58,9 @@
     this.listenTo( this, 'remove', this.on_remove );
   }
 
-  Backbone.GroupedCollection.prototype = Backbone.Collection.prototype;
-  Backbone.GroupedCollection.__super__ = Backbone.Collection.prototype;
+  var Surrogate = function(){ this.constructor = Backbone.View; };
+  Surrogate.prototype = Backbone.Collection.prototype;
+  Backbone.GroupedCollection.prototype = new Surrogate;
   
  
   _.extend( Backbone.GroupedCollection.prototype, Backbone.Collection.prototype, {
@@ -81,13 +85,13 @@
       _.each( _groups, function( group ){
         var _filter = {};
         _filter[ key ] = group;
-        self.subgroups[ group ] = new Subgroup( self, { filter: _filter });
+        self.subgroups[ group ] = new Backbone.Subgroup( self, { filter: _filter });
       })
     },
     add_group: function( group ){
       var _filter = {} ;
       _filter[ this.options.group_by ] = group;
-      this.subgroups[ group ] = new Subgroup( this, { filter: _filter } );
+      this.subgroups[ group ] = new Backbone.Subgroup( this, { filter: _filter } );
     },
     remove_group: function( group ){
       if( this.subgroups[ group ] ) delete this.subgroups[group];
