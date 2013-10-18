@@ -1,6 +1,6 @@
 (function(){
 
-  var _parent, a1, a2, b1, b2, elements; 
+  var _parent, a1, a2, a3, b1, b2, c1, elements; 
 
   module("Backbone.GroupedCollection", {
     setup: function(){
@@ -71,5 +71,21 @@
     _instance.remove( _model );
 
     deepEqual( _.keys(_instance.subgroups) , [ 'a', 'b' ] )
+  })
+
+  test("can iterate the groups", function(){
+    var _instance = new Backbone.GroupedCollection( elements )
+
+    _instance.group_by( 'letter' );
+
+    var _groups = _instance.subgroups;
+    var _enumerated = [];
+    var i = 0;
+
+    _instance.each_group( function( group ){
+      _enumerated.push( group );
+    }) 
+
+    deepEqual( _.values( _groups ), _enumerated );
   })
 }).call( this )

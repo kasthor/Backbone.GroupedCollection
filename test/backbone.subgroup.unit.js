@@ -1,6 +1,6 @@
 (function(){
 
-  var _parent, a1, a2, b1, b2, elements; 
+  var _parent, a1, a2, a3, b1, b2, c1, elements; 
 
   module("Backbone.Subgroup", {
     setup: function(){
