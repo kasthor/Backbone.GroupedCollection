@@ -20,6 +20,8 @@
   Surrogate.prototype = Backbone.Collection.prototype;
   Backbone.Subgroup.prototype = new Surrogate;
 
+  Backbone.Subgroup.extend = Backbone.Collection.extend;
+
   _.extend(Backbone.Subgroup.prototype, Backbone.Collection.prototype, {
     _filtered_items: function(){
       if( ! this.options.filter )
@@ -62,6 +64,7 @@
   Surrogate.prototype = Backbone.Collection.prototype;
   Backbone.GroupedCollection.prototype = new Surrogate;
   
+  Backbone.GroupedCollection.extend = Backbone.Collection.extend;
  
   _.extend( Backbone.GroupedCollection.prototype, Backbone.Collection.prototype, {
     on_add: function( item ){
@@ -95,6 +98,9 @@
     },
     remove_group: function( group ){
       if( this.subgroups[ group ] ) delete this.subgroups[group];
+    },
+    each_group: function( iterator, context ){
+      return _(this.subgroups).each( iterator, context ); 
     },
     _group_field_value: function( item ){
       return item.get( this.options.group_by );      
