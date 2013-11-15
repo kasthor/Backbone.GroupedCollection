@@ -94,10 +94,14 @@
     add_group: function( group ){
       var _filter = {} ;
       _filter[ this.options.group_by ] = group;
-      this.subgroups[ group ] = new Backbone.Subgroup( this, { filter: _filter } );
+      this.subgroups[ group ] = new Backbone.Subgroup( this, { filter: _filter } )
+      this.trigger( 'add_group', this.subgroups[ group ] )
     },
     remove_group: function( group ){
-      if( this.subgroups[ group ] ) delete this.subgroups[group];
+      if( this.subgroups[ group ] ){
+        this.trigger( 'remove_group', this.subgroups[group] );
+        delete this.subgroups[group];
+      }
     },
     each_group: function( iterator, context ){
       return _(this.subgroups).each( iterator, context ); 

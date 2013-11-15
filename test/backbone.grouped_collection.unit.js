@@ -53,6 +53,16 @@
     deepEqual( _.keys(_instance.subgroups), [ 'a', 'b', 'c' ] );
   })
 
+  test("when a group gets created, it sends a notification with the group", function(){
+    var _instance = new Backbone.GroupedCollection( elements )
+    _instance.group_by( 'letter' );
+    _instance.on("add_group", function( group ){
+      ok( group instanceof Backbone.Subgroup ) 
+    })
+    _instance.add( c1 );
+  })
+
+
   test("when deleting an item remove the group if it's the last item in the collection", 2, function(){
     var _instance = new Backbone.GroupedCollection( elements )
     var _model;
@@ -71,6 +81,21 @@
     _instance.remove( _model );
 
     deepEqual( _.keys(_instance.subgroups) , [ 'a', 'b' ] )
+  })
+
+  test("when a group gets removed, it sends a notification with the group", function(){
+    var _instance = new Backbone.GroupedCollection( elements )
+    var _model;
+    _instance.group_by('letter');
+    _instance.add( c1 );
+
+    _instance.on("remove_group", function( group ){
+      ok( group instanceof Backbone.Subgroup ) 
+    })
+
+    _model = _instance.findWhere( { letter: 'c' } )
+
+    _instance.remove( _model );
   })
 
   test("can iterate the groups", function(){
