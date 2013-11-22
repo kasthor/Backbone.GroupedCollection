@@ -12,6 +12,12 @@
 
   _.extend( Backbone.CollectionView.prototype, Backbone.View.prototype, {
     modelView: Backbone.View,
+    _canvas: function(){
+      if ( this.canvasSelector ) 
+        return this.$( this.canvasSelector );
+      else
+        return this.$el;
+    },
     render: function(){
       var self = this,
           $canvas,
@@ -19,13 +25,8 @@
 
       if ( this.template ) 
         this.$el.html( this.template() );
-      else
+      else 
         this.$el.empty();
-
-      if ( this.canvasSelector ) 
-        $canvas = this.$( this.canvasSelector );
-      else
-        $canvas = this.$el;
 
       // Compatibility with Backbone.GroupedCollection
       if( this._iterate_collections() ) _iterator = 'each_group'
@@ -33,7 +34,7 @@
       this._sub_views = [];
       this.collection[_iterator](function(model){
         var _view = self._new_view_for_item( model );
-        $($canvas).append( _view.render().el );
+        $(self._canvas()).append( _view.render().el );
       })  
 
       this._setup_listeners();
@@ -42,7 +43,7 @@
     _setup_listeners: function(){
       if( ! this._listeners ){
         this._listeners = true;
-        if( this._iterate_collections() ) {
+        if ( this._iterate_collections() ) {
           this.listenTo( this.collection, "add_group", this.add )
           this.listenTo( this.collection, "remove_group", this.remove )
         } else {
@@ -74,7 +75,7 @@
     },
     add: function( item ){
       var _view = this._new_view_for_item( item );
-      this.$el.append( _view.render().el ); 
+      this._canvas().append( _view.render().el ); 
     },
     remove: function( item ){
       var _view = this._view_for_item( item );
